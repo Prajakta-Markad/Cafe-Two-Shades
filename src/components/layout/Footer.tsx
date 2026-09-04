@@ -88,10 +88,10 @@ export default function Footer() {
             </Link>
 
             <Link
-              to="/bookings"
+              to="/orders"
               className="text-stone-300 transition-colors hover:text-[#C49A3A]"
             >
-              Bookings & Orders
+              Order Online
             </Link>
 
             <Link
@@ -102,10 +102,10 @@ export default function Footer() {
             </Link>
 
             <Link
-              to="/admin/login"
+              to="/admin"
               className="mt-3 text-xs text-stone-500 transition-colors hover:text-[#C49A3A]"
             >
-              Admin Login
+              Admin
             </Link>
           </nav>
         </div>

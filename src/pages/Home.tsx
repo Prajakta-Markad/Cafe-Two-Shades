@@ -25,6 +25,10 @@ import { lazy, Suspense } from "react";
 
 import Hero from "../components/home/Hero";
 
+import ReviewsSection from "../components/home/ReviewsSection";
+import CustomerPhotoSection from "../components/home/CustomerPhotoSection";
+
+
 const OurStory = lazy(() => import("../components/home/OurStory"));
 const WhyTwoShades = lazy(
   () => import("../components/home/WhyTwoShades")
@@ -47,10 +51,14 @@ export default function Home() {
         <OurStory />
         <WhyTwoShades />
         <SeasonalSpecial />
-        <Reviews />
-        <CommunityGallery />
+        <CustomerPhotoSection />
+        <ReviewsSection />
         <VisitUs />
       </Suspense>
     </>
   );
 }
+
+/* old ones
+ <Reviews />
+ <CommunityGallery /> */

@@ -1,4 +1,4 @@
-import type { MenuCategory as MenuCategoryType } from "../../data/menu";
+import type { MenuCategory as MenuCategoryType } from "../../services/menuService";
 import MenuItem from "./MenuItem";
 
 interface MenuCategoryProps {
@@ -16,7 +16,7 @@ export default function MenuCategory({
     <section
       id={category.id}
       aria-labelledby={`${category.id}-heading`}
-      className="scroll-mt-28"
+      className="scroll-mt-32"
     >
       <div className="mb-6 flex items-center gap-4">
         <h2
@@ -32,10 +32,19 @@ export default function MenuCategory({
         />
       </div>
 
+      {category.note && (
+        <p className="mb-5 max-w-3xl text-sm italic leading-6 text-stone-500">
+          {category.note}
+        </p>
+      )}
+
       {availableItems.length > 0 ? (
         <div className="divide-y divide-brand-border">
           {availableItems.map((item) => (
-            <MenuItem key={item.id} item={item} />
+            <MenuItem
+              key={item.id}
+              item={item}
+            />
           ))}
         </div>
       ) : (

@@ -10,8 +10,8 @@ const links = [
     to: "/menu",
   },
   {
-    label: "Bookings & Orders",
-    to: "/bookings",
+    label: "Order Online",
+    to: "/orders",
   },
 ];
 
