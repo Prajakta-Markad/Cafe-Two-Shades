@@ -1,17 +1,6 @@
-import {
-    ReactNode,
-    useEffect,
-    useState,
-  } from "react";
-  
-  import {
-    Navigate,
-    useLocation,
-  } from "react-router-dom";
-  
-  import {
-    getCurrentAdmin,
-  } from "../../services/adminService";
+import { type ReactNode, useEffect, useState, } from "react";
+import { Navigate, useLocation, } from "react-router-dom";
+import { getCurrentAdmin, } from "../../services/adminService";
   
   interface ProtectedAdminRouteProps {
     children: ReactNode;

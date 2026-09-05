@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useState,} from "react";
+import { type FormEvent, useEffect, useMemo, useState,} from "react";
 import { createBooking, getBookingSlots,type BookingSlot,} from "../services/bookingService";
   
   const MAX_PARTY_SIZE = 8;

@@ -1,185 +1,209 @@
-import {
-    FormEvent,
-    useState,
-  } from "react";
-  
-  import { signInAdmin } from "../../services/authService";
-  
-  interface AdminLoginProps {
-    onSuccess: () => void;
-  }
-  
-  export default function AdminLogin({
-    onSuccess,
-  }: AdminLoginProps) {
-    const [
-      email,
-      setEmail,
-    ] = useState("");
-  
-    const [
-      password,
-      setPassword,
-    ] = useState("");
-  
-    const [
-      loading,
-      setLoading,
-    ] = useState(false);
-  
-    const [
-      error,
-      setError,
-    ] = useState("");
-  
-    async function handleSubmit(
-      event: FormEvent<HTMLFormElement>
-    ) {
-      event.preventDefault();
-  
-      setError("");
-      setLoading(true);
-  
-      try {
-        await signInAdmin(
-          email,
-          password
-        );
-  
-        onSuccess();
-      } catch (error) {
-        setError(
-          error instanceof Error
-            ? error.message
-            : "Unable to sign in."
-        );
-      } finally {
-        setLoading(false);
-      }
+import { FormEvent, useState, } from "react";
+
+import { useLocation, useNavigate, } from "react-router-dom";
+
+import { supabase } from "../../lib/supabase";
+import { getCurrentAdmin, } from "../../services/adminService";
+
+export default function AdminLogin() {
+  const navigate =
+    useNavigate();
+
+  const location =
+    useLocation();
+
+  const [
+    email,
+    setEmail,
+  ] = useState("");
+
+  const [
+    password,
+    setPassword,
+  ] = useState("");
+
+  const [
+    loading,
+    setLoading,
+  ] = useState(false);
+
+  const [
+    error,
+    setError,
+  ] = useState("");
+
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+
+    if (loading) {
+      return;
     }
-  
-    return (
-      <main className="min-h-screen bg-brand-beige px-6 py-16">
-        <div className="mx-auto flex min-h-[70vh] max-w-md items-center">
-          <div className="w-full rounded-2xl border border-brand-border bg-brand-ivory p-8 shadow-sm sm:p-10">
-  
-            <div className="text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-ochre">
-                Cafe Two Shades
-              </p>
-  
-              <h1 className="mt-3 font-serif text-3xl font-semibold">
-                Admin Login
-              </h1>
-  
-              <p className="mt-3 text-sm leading-6 text-stone-500">
-                This area is for authorised Cafe Two
-                Shades administrators.
-              </p>
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const {
+        error: signInError,
+      } =
+        await supabase.auth.signInWithPassword({
+          email:
+            email.trim(),
+          password,
+        });
+
+      if (signInError) {
+        throw new Error(
+          "Invalid email or password."
+        );
+      }
+
+      /*
+       * Authentication alone does not grant
+       * dashboard access.
+       *
+       * The user must also exist in
+       * admin_profiles and be active.
+       */
+
+      const admin =
+        await getCurrentAdmin();
+
+      if (!admin) {
+        await supabase.auth.signOut();
+
+        throw new Error(
+          "You do not have permission to access the admin area."
+        );
+      }
+
+      const destination =
+        (
+          location.state as
+            | {
+                from?: string;
+              }
+            | null
+        )?.from ??
+        "/admin";
+
+      navigate(
+        destination,
+        {
+          replace: true,
+        }
+      );
+    } catch (loginError) {
+      setError(
+        loginError instanceof Error
+          ? loginError.message
+          : "Unable to sign in."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-[#faf8f4] px-6 py-12">
+      <section className="w-full max-w-md">
+        <div className="rounded-2xl border border-[#e1d9cc] bg-white p-7 shadow-sm sm:p-9">
+          <div className="text-center">
+            <p className="text-sm font-medium uppercase tracking-[0.25em] text-[#8a6a22]">
+              Cafe Two Shades
+            </p>
+
+            <h1 className="mt-3 font-serif text-3xl text-[#171512]">
+              Admin login
+            </h1>
+
+            <p className="mt-3 text-sm leading-6 text-[#6b645b]">
+              This area is restricted to
+              authorised café administrators.
+            </p>
+          </div>
+
+          <form
+            onSubmit={
+              handleSubmit
+            }
+            className="mt-8 space-y-5"
+          >
+            <div>
+              <label
+                htmlFor="admin-email"
+                className="block text-sm font-medium text-[#29251f]"
+              >
+                Email address
+              </label>
+
+              <input
+                id="admin-email"
+                type="email"
+                autoComplete="username"
+                value={email}
+                onChange={(event) =>
+                  setEmail(
+                    event.target.value
+                  )
+                }
+                required
+                disabled={loading}
+                className="mt-2 block w-full rounded-lg border border-[#d7cfc2] bg-[#faf8f4] px-4 py-3 text-sm text-[#171512] outline-none transition focus:border-[#8a6a22] focus:ring-2 focus:ring-[#8a6a22]/20 disabled:opacity-60"
+              />
             </div>
-  
+
+            <div>
+              <label
+                htmlFor="admin-password"
+                className="block text-sm font-medium text-[#29251f]"
+              >
+                Password
+              </label>
+
+              <input
+                id="admin-password"
+                type="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(event) =>
+                  setPassword(
+                    event.target.value
+                  )
+                }
+                required
+                disabled={loading}
+                className="mt-2 block w-full rounded-lg border border-[#d7cfc2] bg-[#faf8f4] px-4 py-3 text-sm text-[#171512] outline-none transition focus:border-[#8a6a22] focus:ring-2 focus:ring-[#8a6a22]/20 disabled:opacity-60"
+              />
+            </div>
+
             {error && (
-              <div
+              <p
                 role="alert"
-                className="mt-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+                className="rounded-lg bg-red-50 px-4 py-3 text-sm leading-5 text-red-800"
               >
                 {error}
-              </div>
+              </p>
             )}
-  
-            <form
-              onSubmit={handleSubmit}
-              className="mt-8 space-y-5"
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-lg bg-[#171512] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#302b25] focus:outline-none focus:ring-2 focus:ring-[#8a6a22] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <div>
-                <label
-                  htmlFor="admin-email"
-                  className="text-sm font-medium"
-                >
-                  Email
-                </label>
-  
-                <input
-                  id="admin-email"
-                  type="email"
-                  value={email}
-                  onChange={(event) =>
-                    setEmail(
-                      event.target.value
-                    )
-                  }
-                  autoComplete="username"
-                  required
-                  className={inputClass}
-                />
-              </div>
-  
-              <div>
-                <label
-                  htmlFor="admin-password"
-                  className="text-sm font-medium"
-                >
-                  Password
-                </label>
-  
-                <input
-                  id="admin-password"
-                  type="password"
-                  value={password}
-                  onChange={(event) =>
-                    setPassword(
-                      event.target.value
-                    )
-                  }
-                  autoComplete="current-password"
-                  required
-                  className={inputClass}
-                />
-              </div>
-  
-              <button
-                type="submit"
-                disabled={loading}
-                className="
-                  w-full
-                  rounded-xl
-                  bg-brand-ochre
-                  px-5
-                  py-3.5
-                  text-sm
-                  font-semibold
-                  text-brand-black
-                  transition
-                  hover:bg-brand-ochre-dark
-                  disabled:cursor-not-allowed
-                  disabled:opacity-50
-                "
-              >
-                {loading
-                  ? "Signing in..."
-                  : "Sign In"}
-              </button>
-            </form>
-          </div>
+              {loading
+                ? "Signing in..."
+                : "Sign in"}
+            </button>
+          </form>
         </div>
-      </main>
-    );
-  }
-  
-  
-  const inputClass = `
-    mt-2
-    w-full
-    rounded-xl
-    border
-    border-brand-border
-    bg-white
-    px-4
-    py-3
-    text-sm
-    outline-none
-    transition
-    focus:border-brand-ochre
-    focus:ring-2
-    focus:ring-brand-ochre/20
-  `;
+
+        <p className="mt-6 text-center text-xs text-[#7a736a]">
+          Authorised administrators only.
+        </p>
+      </section>
+    </main>
+  );
+}
