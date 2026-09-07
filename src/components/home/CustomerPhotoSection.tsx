@@ -1,3 +1,22 @@
+import CustomerPhotoGallery from "./CustomerPhotoGallery";
+import CustomerPhotoSubmission from "./CustomerPhotoSubmission";
+
+export default function CustomerPhotoSection() {
+  return (
+    <>
+      <CustomerPhotoGallery />
+
+      <section className="bg-[#f8f5ef] px-5 py-12 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-4xl">
+          <CustomerPhotoSubmission />
+        </div>
+      </section>
+    </>
+  );
+}
+
+/* initial Code:
+
 import {
     type ChangeEvent,
     useEffect,
@@ -407,3 +426,5 @@ import {
       </section>
     );
   }
+
+  */

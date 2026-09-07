@@ -12,6 +12,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ProtectedAdminRoute from "./components/admin/ProtectedAdminRoute";
+import HomepageContentManagement from "./pages/admin/HomepageContentManagement";
 import MenuManagement from "./pages/admin/MenuManagement";
 import SeasonalSpecialManagement
   from "./pages/admin/SeasonalSpecialManagement";
@@ -32,6 +33,7 @@ function App() {
           <Route path="/admin" element={<AdminRoute />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin" element={ <ProtectedAdminRoute> <AdminDashboard /> </ProtectedAdminRoute> } />
+          <Route path="/admin/homepage-content" element={ <ProtectedAdminRoute> <HomepageContentManagement /> </ProtectedAdminRoute> } />
           <Route path="/admin/menu" element={ <ProtectedAdminRoute> <MenuManagement /> </ProtectedAdminRoute> } />
           <Route path="/admin/seasonal-special" element={ <ProtectedAdminRoute> <SeasonalSpecialManagement /></ProtectedAdminRoute> } />
         </Route>
