@@ -5,31 +5,20 @@ import {useState,} from "react";
   import AdminLogin from "./AdminLogin";
   
   export default function AdminRoute() {
-    const [
-      authenticated,
-      setAuthenticated,
-    ] = useState(false);
+    const [ authenticated, setAuthenticated, ] = useState(false);
   
     if (!authenticated) {
       return (
         <AdminLogin
-          onSuccess={() =>
-            setAuthenticated(true)
-          }
+          onSuccess={() => setAuthenticated(true) }
         />
       );
     }
   
     return (
-      <AdminGuard
-        onUnauthorised={() =>
-          setAuthenticated(false)
-        }
-      >
+      <AdminGuard onUnauthorised={() => setAuthenticated(false) }>
         <AdminDashboard
-          onSignOut={() =>
-            setAuthenticated(false)
-          }
+          onSignOut={() => setAuthenticated(false) }
         />
       </AdminGuard>
     );

@@ -24,15 +24,12 @@ export async function getPublicGoogleReviews() {
   } = await supabase
     .from("google_reviews")
     .select(
-      "id,reviewer_name,review_text,rating,source,display_order"
+      "id, reviewer_name, review_text, rating, source"
     )
-    .eq(
-      "is_visible",
-      true
-    )
-    .order(
-      "display_order"
-    );
+    .eq("is_visible", true)
+    .order("display_order", {
+      ascending: true,
+    });
 
   if (error) {
     throw new Error(

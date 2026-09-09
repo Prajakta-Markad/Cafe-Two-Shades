@@ -11,23 +11,14 @@ interface GalleryPhoto {
 }
 
 export default function CustomerPhotoGallery() {
-  const [photos, setPhotos] =
-    useState<GalleryPhoto[]>([]);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [activeIndex, setActiveIndex] =
-    useState(0);
-
-  useEffect(() => {
+  const [photos, setPhotos] = useState<GalleryPhoto[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0);
+useEffect(() => {
     let mounted = true;
-
     getApprovedCustomerPhotos()
       .then((data) => {
-        if (mounted) {
-          setPhotos(data);
-        }
+        if (mounted) { setPhotos(data); }
       })
       .catch(() => {
         if (mounted) {
@@ -35,37 +26,23 @@ export default function CustomerPhotoGallery() {
         }
       })
       .finally(() => {
-        if (mounted) {
-          setLoading(false);
-        }
+        if (mounted) { setLoading(false); }
       });
-
-    return () => {
-      mounted = false;
-    };
+    return () => { mounted = false; };
   }, []);
 
-  useEffect(() => {
-    if (photos.length <= 1) {
-      return;
-    }
+  useEffect(() => { if (photos.length <= 1) { return; }
 
     const interval = window.setInterval(() => {
       setActiveIndex((current) =>
-        current === photos.length - 1
-          ? 0
-          : current + 1
+        current === photos.length - 1 ? 0 : current + 1
       );
     }, 5000);
 
-    return () => {
-      window.clearInterval(interval);
-    };
+    return () => { window.clearInterval(interval); };
   }, [photos.length]);
 
-  if (loading || photos.length === 0) {
-    return null;
-  }
+  if (loading || photos.length === 0) { return null; }
 
   const activePhoto = photos[activeIndex];
 

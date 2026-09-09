@@ -26,19 +26,20 @@ import Hero from "../components/home/Hero";
 import ReviewsSection from "../components/home/ReviewsSection";
 import CustomerPhotoSection from "../components/home/CustomerPhotoSection";
 import GoogleReviews from "../components/home/GoogleReviews";
+import SeasonalSpecial from "../components/home/SeasonalSpecial";
 
 
 const OurStory = lazy(() => import("../components/home/OurStory"));
 const WhyTwoShades = lazy(
   () => import("../components/home/WhyTwoShades")
 );
-const SeasonalSpecial = lazy(
-  () => import("../components/home/SeasonalSpecial")
-);
-const Reviews = lazy(() => import("../components/home/Reviews"));
-const CommunityGallery = lazy(
-  () => import("../components/home/CommunityGallery")
-);
+//const SeasonalSpecial = lazy(
+//  () => import("../components/home/SeasonalSpecial")
+//);
+//const Reviews = lazy(() => import("../components/home/Reviews"));
+//const CommunityGallery = lazy(
+//  () => import("../components/home/CommunityGallery")
+//);
 const VisitUs = lazy(() => import("../components/home/VisitUs"));
 
 export default function Home() {

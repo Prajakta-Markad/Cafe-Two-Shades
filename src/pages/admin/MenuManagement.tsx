@@ -1,70 +1,17 @@
-import {
-    type FormEvent,
-    useEffect,
-    useState,
-  } from "react";
+import { type FormEvent, useEffect, useState, } from "react";
   
-  import {
-    createCategory,
-    createMenuItem,
-    createMenuNote,
-    createMenuPrice,
-    deleteMenuNote,
-    deleteMenuPrice,
-    getAdminMenu,
-    type MenuCategory,
-    type MenuItem,
-    type MenuItemPrice,
-    type MenuNote,
-    updateCategory,
-    updateMenuItem,
-    updateMenuNote,
-    updateMenuPrice,
+  import { createCategory, createMenuItem, createMenuNote, createMenuPrice, deleteMenuNote, deleteMenuPrice, getAdminMenu, 
+    type MenuCategory, type MenuItem, type MenuItemPrice, type MenuNote, updateCategory, updateMenuItem, updateMenuNote, updateMenuPrice,
   } from "../../services/menuService";
   
   export default function MenuManagement() {
-    const [
-      categories,
-      setCategories,
-    ] = useState<MenuCategory[]>(
-      []
-    );
-  
-    const [
-      items,
-      setItems,
-    ] = useState<MenuItem[]>(
-      []
-    );
-  
-    const [
-      prices,
-      setPrices,
-    ] = useState<MenuItemPrice[]>(
-      []
-    );
-  
-    const [
-      notes,
-      setNotes,
-    ] = useState<MenuNote[]>(
-      []
-    );
-  
-    const [
-      loading,
-      setLoading,
-    ] = useState(true);
-  
-    const [
-      error,
-      setError,
-    ] = useState("");
-  
-    const [
-      message,
-      setMessage,
-    ] = useState("");
+    const [ categories, setCategories, ] = useState<MenuCategory[]>([]);
+    const [ items, setItems, ] = useState<MenuItem[]>([]);
+    const [ prices, setPrices, ] = useState<MenuItemPrice[]>([]);
+    const [ notes, setNotes, ] = useState<MenuNote[]>([]);
+    const [ loading, setLoading, ] = useState(true);
+    const [ error, setError, ] = useState("");
+    const [ message, setMessage, ] = useState("");
   
     async function loadMenu() {
       setLoading(true);
@@ -74,21 +21,10 @@ import {
         const data =
           await getAdminMenu();
   
-        setCategories(
-          data.categories
-        );
-  
-        setItems(
-          data.items
-        );
-  
-        setPrices(
-          data.prices
-        );
-  
-        setNotes(
-          data.notes
-        );
+        setCategories( data.categories );
+        setItems( data.items );
+        setPrices( data.prices );
+        setNotes( data.notes );
       } catch (loadError) {
         setError(
           loadError instanceof Error
@@ -100,9 +36,7 @@ import {
       }
     }
   
-    useEffect(() => {
-      loadMenu();
-    }, []);
+    useEffect(() => { loadMenu(); }, []);
   
     async function perform(
       action: () => Promise<void>,
@@ -114,9 +48,7 @@ import {
       try {
         await action();
   
-        setMessage(
-          successMessage
-        );
+        setMessage( successMessage );
   
         await loadMenu();
       } catch (actionError) {
@@ -169,13 +101,7 @@ import {
   
         <AddCategoryForm
           onSubmit={(data) =>
-            perform(
-              () =>
-                createCategory(
-                  data
-                ),
-              "Category created."
-            )
+            perform( () => createCategory( data ), "Category created." )
           }
         />
   
@@ -187,106 +113,37 @@ import {
                 category={category}
                 items={items.filter(
                   (item) =>
-                    item.category_id ===
-                    category.id
+                    item.category_id === category.id
                 )}
                 prices={prices}
                 notes={notes}
-                onUpdateCategory={(
-                  updates
-                ) =>
+                onUpdateCategory={( updates ) =>
                   perform(
-                    () =>
-                      updateCategory(
-                        category.id,
-                        updates
-                      ),
-                    "Category updated."
-                  )
+                    () => updateCategory( category.id, updates ), "Category updated." )
                 }
-                onUpdateItem={(
-                  id,
-                  updates
-                ) =>
-                  perform(
-                    () =>
-                      updateMenuItem(
-                        id,
-                        updates
-                      ),
-                    "Menu item updated."
-                  )
+                onUpdateItem={( id, updates ) =>
+                  perform( () => updateMenuItem( id, updates ), "Menu item updated." )
                 }
                 onAddItem={(data) =>
-                  perform(
-                    () =>
-                      createMenuItem(
-                        data
-                      ),
-                    "Menu item created."
-                  )
+                  perform( () => createMenuItem( data ), "Menu item created." )
                 }
                 onAddPrice={(data) =>
-                  perform(
-                    () =>
-                      createMenuPrice(
-                        data
-                      ),
-                    "Price added."
-                  )
+                  perform( () => createMenuPrice( data ), "Price added." )
                 }
-                onUpdatePrice={(
-                  id,
-                  updates
-                ) =>
-                  perform(
-                    () =>
-                      updateMenuPrice(
-                        id,
-                        updates
-                      ),
-                    "Price updated."
-                  )
+                onUpdatePrice={( id, updates ) =>
+                  perform( () => updateMenuPrice( id, updates ), "Price updated." )
                 }
                 onDeletePrice={(id) =>
-                  perform(
-                    () =>
-                      deleteMenuPrice(
-                        id
-                      ),
-                    "Price deleted."
-                  )
+                  perform( () => deleteMenuPrice( id ), "Price deleted." )
                 }
                 onAddNote={(data) =>
-                  perform(
-                    () =>
-                      createMenuNote(
-                        data
-                      ),
-                    "Note added."
-                  )
+                  perform( () => createMenuNote( data ), "Note added." )
                 }
-                onUpdateNote={(
-                  id,
-                  updates
-                ) =>
-                  perform(
-                    () =>
-                      updateMenuNote(
-                        id,
-                        updates
-                      ),
-                    "Note updated."
-                  )
+                onUpdateNote={( id, updates ) =>
+                  perform( () => updateMenuNote( id, updates ), "Note updated." )
                 }
                 onDeleteNote={(id) =>
-                  perform(
-                    () =>
-                      deleteMenuNote(
-                        id
-                      ),
-                    "Note deleted."
-                  )
+                  perform( () => deleteMenuNote( id ), "Note deleted." )
                 }
               />
             )
@@ -295,7 +152,6 @@ import {
       </div>
     );
   }
-  
   
   /* ============================================================
      CATEGORY FORM
@@ -310,34 +166,17 @@ import {
       display_order: number;
     }) => Promise<void>;
   }) {
-    const [
-      name,
-      setName,
-    ] = useState("");
-  
-    const [
-      description,
-      setDescription,
-    ] = useState("");
-  
-    const [
-      order,
-      setOrder,
-    ] = useState(0);
-  
-    const [
-      submitting,
-      setSubmitting,
-    ] = useState(false);
+    const [ name, setName, ] = useState("");
+    const [ description, setDescription, ] = useState("");
+    const [ order, setOrder, ] = useState(0);
+    const [ submitting, setSubmitting, ] = useState(false);
   
     async function handleSubmit(
       event: FormEvent
     ) {
       event.preventDefault();
   
-      if (!name.trim()) {
-        return;
-      }
+      if (!name.trim()) { return;}
   
       setSubmitting(true);
   
@@ -358,45 +197,18 @@ import {
     }
   
     return (
-      <form
-        onSubmit={handleSubmit}
-        className="rounded-xl border border-[#e1d9cc] bg-white p-6"
-      >
-        <h3 className="font-serif text-xl">
-          Add category
-        </h3>
+      <form onSubmit={handleSubmit} className="rounded-xl border border-[#e1d9cc] bg-white p-6" >
+        <h3 className="font-serif text-xl"> Add category </h3>
   
         <div className="mt-5 grid gap-4 md:grid-cols-[1fr_1fr_120px_auto] md:items-end">
-          <Field
-            label="Category name"
-            value={name}
-            onChange={setName}
-            required
+          <Field label="Category name" value={name} onChange={setName} required />
+          <Field label="Description" value={description} onChange={setDescription} />
+          <Field label="Order" type="number" value={String(order)}
+            onChange={(value) => setOrder( Number(value))}
           />
   
-          <Field
-            label="Description"
-            value={description}
-            onChange={setDescription}
-          />
-  
-          <Field
-            label="Order"
-            type="number"
-            value={String(order)}
-            onChange={(value) =>
-              setOrder(
-                Number(value)
-              )
-            }
-          />
-  
-          <button
-            type="submit"
-            disabled={submitting}
-            className="rounded-lg bg-[#171512] px-5 py-3 text-sm font-medium text-white disabled:opacity-50"
-          >
-            Add
+          <button type="submit" disabled={submitting}
+            className="rounded-lg bg-[#171512] px-5 py-3 text-sm font-medium text-white disabled:opacity-50" > Add
           </button>
         </div>
       </form>
@@ -534,15 +346,9 @@ import {
                     updates
                   )
                 }
-                onAddPrice={
-                  onAddPrice
-                }
-                onUpdatePrice={
-                  onUpdatePrice
-                }
-                onDeletePrice={
-                  onDeletePrice
-                }
+                onAddPrice={ onAddPrice }
+                onUpdatePrice={ onUpdatePrice }
+                onDeletePrice={ onDeletePrice }
                 onAddNote={(data) =>
                   onAddNote({
                     ...data,
@@ -550,39 +356,19 @@ import {
                       item.id,
                   })
                 }
-                onUpdateNote={
-                  onUpdateNote
-                }
-                onDeleteNote={
-                  onDeleteNote
-                }
+                onUpdateNote={ onUpdateNote }
+                onDeleteNote={ onDeleteNote }
               />
             )
           )}
         </div>
   
-        <AddItemForm
-          categoryId={
-            category.id
-          }
-          nextOrder={
-            items.length
-          }
-          onSubmit={
-            onAddItem
-          }
+        <AddItemForm categoryId={ category.id } nextOrder={ items.length }
+          onSubmit={ onAddItem }
         />
   
-        <AddCategoryNoteForm
-          categoryId={
-            category.id
-          }
-          nextOrder={
-            categoryNotes.length
-          }
-          onSubmit={
-            onAddNote
-          }
+        <AddCategoryNoteForm categoryId={ category.id } nextOrder={ categoryNotes.length }
+          onSubmit={ onAddNote }
         />
       </section>
     );
@@ -641,29 +427,10 @@ import {
       id: string
     ) => Promise<void>;
   }) {
-    const [
-      editing,
-      setEditing,
-    ] = useState(false);
-  
-    const [
-      name,
-      setName,
-    ] = useState(item.name);
-  
-    const [
-      description,
-      setDescription,
-    ] = useState(
-      item.description ?? ""
-    );
-  
-    const [
-      order,
-      setOrder,
-    ] = useState(
-      item.display_order
-    );
+    const [ editing, setEditing, ] = useState(false);
+    const [ name, setName, ] = useState(item.name);
+    const [ description, setDescription, ] = useState( item.description ?? "" );
+    const [ order, setOrder, ] = useState(item.display_order);
   
     async function save() {
       await onUpdate({
@@ -681,77 +448,34 @@ import {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           {editing ? (
             <div className="grid flex-1 gap-3">
-              <Field
-                label="Name"
-                value={name}
-                onChange={setName}
-                required
-              />
+              <Field label="Name" value={name} onChange={setName} required />
   
-              <Field
-                label="Description"
-                value={
-                  description
-                }
-                onChange={
-                  setDescription
-                }
-              />
+              <Field label="Description" value={ description } onChange={ setDescription } />
   
-              <Field
-                label="Display order"
-                type="number"
-                value={String(order)}
-                onChange={(value) =>
-                  setOrder(
-                    Number(value)
-                  )
-                }
-              />
+              <Field label="Display order" type="number" value={String(order)}
+                onChange={(value) => setOrder( Number(value) )} />
   
               <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={
-                    save
-                  }
-                  className="rounded-lg bg-[#171512] px-4 py-2 text-sm text-white"
-                >
-                  Save
+                <button type="button"
+                  onClick={save}
+                  className="rounded-lg bg-[#171512] px-4 py-2 text-sm text-white" > Save
                 </button>
   
-                <button
-                  type="button"
-                  onClick={() =>
-                    setEditing(
-                      false
-                    )
-                  }
-                  className="rounded-lg border border-[#d7cfc2] px-4 py-2 text-sm"
-                >
-                  Cancel
+                <button type="button"
+                  onClick={() => setEditing( false )}
+                  className="rounded-lg border border-[#d7cfc2] px-4 py-2 text-sm" > Cancel
                 </button>
               </div>
             </div>
           ) : (
             <div className="flex-1">
               <div className="flex flex-wrap items-center gap-3">
-                <h4 className="font-medium">
-                  {item.name}
-                </h4>
+                <h4 className="font-medium"> {item.name} </h4>
   
-                <span className="text-xs text-[#7a736a]">
-                  {item.is_available
-                    ? "Available"
-                    : "Unavailable"}
-                </span>
+                <span className="text-xs text-[#7a736a]"> {item.is_available ? "Available" : "Unavailable"} </span>
               </div>
   
-              {item.description && (
-                <p className="mt-1 text-sm text-[#6b645b]">
-                  {item.description}
-                </p>
-              )}
+              {item.description && ( <p className="mt-1 text-sm text-[#6b645b]"> {item.description} </p> )}
             </div>
           )}
   
@@ -760,37 +484,22 @@ import {
               <button
                 type="button"
                 onClick={() =>
-                  onUpdate({
-                    is_available:
-                      !item.is_available,
-                  })
+                  onUpdate({ is_available: !item.is_available, })
                 }
-                className="rounded-lg border border-[#d7cfc2] px-3 py-2 text-xs"
-              >
-                {item.is_available
-                  ? "Hide"
-                  : "Show"}
+                className="rounded-lg border border-[#d7cfc2] px-3 py-2 text-xs" >
+                {item.is_available ? "Hide" : "Show"}
               </button>
   
-              <button
-                type="button"
-                onClick={() =>
-                  setEditing(
-                    true
-                  )
-                }
-                className="rounded-lg border border-[#d7cfc2] px-3 py-2 text-xs"
-              >
-                Edit
+              <button type="button"
+                onClick={() => setEditing( true )}
+                className="rounded-lg border border-[#d7cfc2] px-3 py-2 text-xs" > Edit
               </button>
             </div>
           )}
         </div>
   
         <div className="mt-5 border-t border-[#e5ded3] pt-5">
-          <h5 className="text-sm font-medium">
-            Prices
-          </h5>
+          <h5 className="text-sm font-medium"> Prices </h5>
   
           <div className="mt-3 space-y-2">
             {prices.map(
@@ -798,12 +507,8 @@ import {
                 <PriceEditor
                   key={price.id}
                   price={price}
-                  onUpdate={
-                    onUpdatePrice
-                  }
-                  onDelete={
-                    onDeletePrice
-                  }
+                  onUpdate={ onUpdatePrice }
+                  onDelete={ onDeletePrice }
                 />
               )
             )}
@@ -811,32 +516,21 @@ import {
   
           <AddPriceForm
             itemId={item.id}
-            nextOrder={
-              prices.length
-            }
-            onSubmit={
-              onAddPrice
-            }
+            nextOrder={ prices.length }
+            onSubmit={ onAddPrice }
           />
         </div>
   
         <div className="mt-5 border-t border-[#e5ded3] pt-5">
-          <h5 className="text-sm font-medium">
-            Notes
-          </h5>
-  
+          <h5 className="text-sm font-medium"> Notes </h5>
           <div className="mt-3 space-y-2">
             {notes.map(
               (note) => (
                 <NoteEditor
                   key={note.id}
                   note={note}
-                  onUpdate={
-                    onUpdateNote
-                  }
-                  onDelete={
-                    onDeleteNote
-                  }
+                  onUpdate={ onUpdateNote }
+                  onDelete={ onDeleteNote }
                 />
               )
             )}
@@ -844,12 +538,8 @@ import {
   
           <AddItemNoteForm
             itemId={item.id}
-            nextOrder={
-              notes.length
-            }
-            onSubmit={
-              onAddNote
-            }
+            nextOrder={ notes.length }
+            onSubmit={ onAddNote }
           />
         </div>
       </div>
@@ -875,84 +565,41 @@ import {
       id: string
     ) => Promise<void>;
   }) {
-    const [
-      label,
-      setLabel,
-    ] = useState(price.label);
+    const [ label, setLabel, ] = useState(price.label);
   
-    const [
-      value,
-      setValue,
-    ] = useState(
-      String(price.price)
-    );
+    const [ value, setValue, ] = useState( String(price.price) );
   
     async function save() {
       await onUpdate(
         price.id,
-        {
-          label,
-          price:
-            Number(value),
-        }
+        { label, price: Number(value), }
       );
     }
   
     return (
       <div className="flex flex-wrap items-end gap-2">
         <div className="min-w-32 flex-1">
-          <label className="text-xs text-[#7a736a]">
-            Size / option
-          </label>
-  
-          <input
-            value={label}
-            onChange={(e) =>
-              setLabel(
-                e.target.value
-              )
-            }
-            className="mt-1 w-full rounded-md border border-[#d7cfc2] bg-white px-3 py-2 text-sm"
-          />
+          <label className="text-xs text-[#7a736a]"> Size / option </label>
+          <input value={label}
+            onChange={(e) => setLabel( e.target.value )}
+            className="mt-1 w-full rounded-md border border-[#d7cfc2] bg-white px-3 py-2 text-sm" />
         </div>
   
         <div className="w-28">
-          <label className="text-xs text-[#7a736a]">
-            Price
-          </label>
+          <label className="text-xs text-[#7a736a]"> Price </label>
   
-          <input
-            type="number"
-            min="0"
-            step="0.01"
-            value={value}
-            onChange={(e) =>
-              setValue(
-                e.target.value
-              )
-            }
-            className="mt-1 w-full rounded-md border border-[#d7cfc2] bg-white px-3 py-2 text-sm"
-          />
+          <input type="number" min="0" step="0.01" value={value}
+            onChange={(e) => setValue( e.target.value )}
+            className="mt-1 w-full rounded-md border border-[#d7cfc2] bg-white px-3 py-2 text-sm" />
         </div>
   
-        <button
-          type="button"
-          onClick={save}
-          className="rounded-md bg-[#171512] px-3 py-2 text-xs text-white"
-        >
-          Save
+        <button type="button" onClick={save}
+          className="rounded-md bg-[#171512] px-3 py-2 text-xs text-white" > Save
         </button>
   
-        <button
-          type="button"
-          onClick={() =>
-            onDelete(
-              price.id
-            )
-          }
-          className="rounded-md border border-red-200 px-3 py-2 text-xs text-red-700"
-        >
-          Delete
+        <button type="button"
+          onClick={() => onDelete( price.id )}
+          className="rounded-md border border-red-200 px-3 py-2 text-xs text-red-700" > Delete
         </button>
       </div>
     );
@@ -977,48 +624,25 @@ import {
       id: string
     ) => Promise<void>;
   }) {
-    const [
-      value,
-      setValue,
-    ] = useState(note.note);
+    const [ value, setValue, ] = useState(note.note);
   
     return (
       <div className="flex flex-col gap-2 sm:flex-row">
-        <input
-          value={value}
-          onChange={(e) =>
-            setValue(
-              e.target.value
-            )
-          }
+        <input value={value}
+          onChange={(e) => setValue( e.target.value )}
           className="flex-1 rounded-md border border-[#d7cfc2] bg-white px-3 py-2 text-sm"
         />
   
-        <button
-          type="button"
-          onClick={() =>
-            onUpdate(
+        <button type="button"
+          onClick={() => onUpdate(
               note.id,
-              {
-                note: value,
-              }
-            )
-          }
-          className="rounded-md bg-[#171512] px-3 py-2 text-xs text-white"
-        >
-          Save
+              {note: value,} )}
+            className="rounded-md bg-[#171512] px-3 py-2 text-xs text-white" > Save
         </button>
   
-        <button
-          type="button"
-          onClick={() =>
-            onDelete(
-              note.id
-            )
-          }
-          className="rounded-md border border-red-200 px-3 py-2 text-xs text-red-700"
-        >
-          Delete
+        <button type="button"
+          onClick={() => onDelete( note.id )}
+          className="rounded-md border border-red-200 px-3 py-2 text-xs text-red-700" > Delete
         </button>
       </div>
     );
@@ -1045,32 +669,22 @@ import {
       }
     ) => Promise<void>;
   }) {
-    const [
-      name,
-      setName,
-    ] = useState("");
+    const [ name, setName, ] = useState("");
   
-    const [
-      description,
-      setDescription,
-    ] = useState("");
+    const [ description, setDescription, ] = useState("");
   
     async function submit(
       event: FormEvent
     ) {
       event.preventDefault();
   
-      if (!name.trim()) {
-        return;
-      }
+      if (!name.trim()) { return; }
   
       await onSubmit({
-        category_id:
-          categoryId,
+        category_id: categoryId,
         name,
         description,
-        display_order:
-          nextOrder,
+        display_order: nextOrder,
       });
   
       setName("");
@@ -1078,38 +692,17 @@ import {
     }
   
     return (
-      <form
-        onSubmit={submit}
+      <form onSubmit={submit}
         className="mt-6 rounded-lg border border-dashed border-[#d7cfc2] p-4"
       >
-        <p className="text-sm font-medium">
-          Add item
-        </p>
+        <p className="text-sm font-medium"> Add item </p>
   
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
-          <Field
-            label="Item name"
-            value={name}
-            onChange={setName}
-            required
-          />
-  
-          <Field
-            label="Description"
-            value={
-              description
-            }
-            onChange={
-              setDescription
-            }
-          />
+          <Field label="Item name" value={name} onChange={setName} required />
+          <Field label="Description" value={ description } onChange={ setDescription } />
         </div>
   
-        <button
-          type="submit"
-          className="mt-3 rounded-lg bg-[#171512] px-4 py-2 text-xs text-white"
-        >
-          Add item
+        <button type="submit" className="mt-3 rounded-lg bg-[#171512] px-4 py-2 text-xs text-white" > Add item
         </button>
       </form>
     );
@@ -1136,32 +729,18 @@ import {
       }
     ) => Promise<void>;
   }) {
-    const [
-      label,
-      setLabel,
-    ] = useState("");
+    const [ label, setLabel, ] = useState("");
   
-    const [
-      price,
-      setPrice,
-    ] = useState("");
+    const [ price, setPrice, ] = useState("");
   
     async function submit() {
-      if (
-        !label.trim() ||
-        !price
-      ) {
-        return;
-      }
+      if ( !label.trim() || !price ) { return; }
   
       await onSubmit({
-        item_id:
-          itemId,
+        item_id: itemId,
         label,
-        price:
-          Number(price),
-        display_order:
-          nextOrder,
+        price: Number(price),
+        display_order: nextOrder,
       });
   
       setLabel("");
@@ -1170,37 +749,18 @@ import {
   
     return (
       <div className="mt-4 flex flex-wrap gap-2">
-        <input
-          placeholder="e.g. 1 Scoop"
-          value={label}
-          onChange={(e) =>
-            setLabel(
-              e.target.value
-            )
-          }
+        <input placeholder="e.g. 1 Scoop" value={label}
+            onChange={(e) => setLabel( e.target.value )}
           className="min-w-32 flex-1 rounded-md border border-[#d7cfc2] px-3 py-2 text-sm"
         />
   
-        <input
-          type="number"
-          min="0"
-          step="0.01"
-          placeholder="Price"
-          value={price}
-          onChange={(e) =>
-            setPrice(
-              e.target.value
-            )
-          }
+        <input type="number" min="0" step="0.01" placeholder="Price" value={price}
+          onChange={(e) => setPrice( e.target.value )}
           className="w-28 rounded-md border border-[#d7cfc2] px-3 py-2 text-sm"
         />
   
-        <button
-          type="button"
-          onClick={submit}
-          className="rounded-md border border-[#d7cfc2] px-3 py-2 text-xs"
-        >
-          Add price
+        <button type="button" onClick={submit}
+          className="rounded-md border border-[#d7cfc2] px-3 py-2 text-xs" > Add price
         </button>
       </div>
     );
@@ -1226,22 +786,15 @@ import {
       }
     ) => Promise<void>;
   }) {
-    const [
-      note,
-      setNote,
-    ] = useState("");
+    const [ note, setNote, ] = useState("");
   
     async function submit() {
-      if (!note.trim()) {
-        return;
-      }
+      if (!note.trim()) { return; }
   
       await onSubmit({
-        category_id:
-          categoryId,
+        category_id: categoryId,
         note,
-        display_order:
-          nextOrder,
+        display_order: nextOrder,
       });
   
       setNote("");
@@ -1249,23 +802,12 @@ import {
   
     return (
       <div className="mt-5 flex gap-2">
-        <input
-          placeholder="Add category note"
-          value={note}
-          onChange={(e) =>
-            setNote(
-              e.target.value
-            )
-          }
+        <input placeholder="Add category note" value={note}
+          onChange={(e) => setNote( e.target.value)}
           className="flex-1 rounded-md border border-[#d7cfc2] px-3 py-2 text-sm"
         />
   
-        <button
-          type="button"
-          onClick={submit}
-          className="rounded-md border border-[#d7cfc2] px-3 py-2 text-xs"
-        >
-          Add note
+        <button type="button" onClick={submit} className="rounded-md border border-[#d7cfc2] px-3 py-2 text-xs" > Add note
         </button>
       </div>
     );
@@ -1287,22 +829,15 @@ import {
       }
     ) => Promise<void>;
   }) {
-    const [
-      note,
-      setNote,
-    ] = useState("");
+    const [ note, setNote, ] = useState("");
   
     async function submit() {
-      if (!note.trim()) {
-        return;
-      }
+      if (!note.trim()) {  return; }
   
       await onSubmit({
-        item_id:
-          itemId,
+        item_id: itemId,
         note,
-        display_order:
-          nextOrder,
+        display_order: nextOrder,
       });
   
       setNote("");
@@ -1310,23 +845,13 @@ import {
   
     return (
       <div className="mt-4 flex gap-2">
-        <input
-          placeholder="Add item note"
-          value={note}
-          onChange={(e) =>
-            setNote(
-              e.target.value
-            )
-          }
+        <input placeholder="Add item note" value={note}
+          onChange={(e) => setNote( e.target.value )}
           className="flex-1 rounded-md border border-[#d7cfc2] px-3 py-2 text-sm"
         />
   
-        <button
-          type="button"
-          onClick={submit}
-          className="rounded-md border border-[#d7cfc2] px-3 py-2 text-xs"
-        >
-          Add note
+        <button type="button" onClick={submit}
+          className="rounded-md border border-[#d7cfc2] px-3 py-2 text-xs" > Add note
         </button>
       </div>
     );
@@ -1354,18 +879,10 @@ import {
   }) {
     return (
       <label className="block">
-        <span className="text-xs font-medium text-[#6b645b]">
-          {label}
-        </span>
+        <span className="text-xs font-medium text-[#6b645b]"> {label} </span>
   
-        <input
-          type={type}
-          value={value}
-          required={required}
-          onChange={(e) =>
-            onChange(
-              e.target.value
-            )
+        <input type={type} value={value} required={required} onChange={(e) =>
+            onChange( e.target.value )
           }
           className="mt-1 block w-full rounded-md border border-[#d7cfc2] bg-white px-3 py-2 text-sm outline-none focus:border-[#8a6a22] focus:ring-2 focus:ring-[#8a6a22]/20"
         />
