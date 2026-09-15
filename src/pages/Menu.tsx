@@ -10,14 +10,10 @@ import {
 } from "../services/menuService";
 
 export default function Menu() {
-  const [categories, setCategories] = useState<MenuCategory[]>(
-    []
-  );
-
+  const [categories, setCategories] = useState<MenuCategory[]>([]);
   const [items, setItems] = useState<MenuItem[]>([]);
   const [prices, setPrices] = useState<MenuItemPrice[]>([]);
   const [notes, setNotes] = useState<MenuNote[]>([]);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
